@@ -65,8 +65,8 @@ echo ""
 echo " ==> Generating Datanode1..."
 $bin/initdb -U postgres -D $dir/datanode1 --nodename datanode1
 sed -i 's/^#port.*/port = 15532				# (change requires restart)/' $dir/datanode1/postgresql.conf
-sed -i 's/#log_line_prefix.*/log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d '                   # special values:/' $dir/datanode1/postgresql.conf
-sed -i 's/#logging_collector.*/logging_collector = on		# Enable capturing of stderr and csvlog/' $dir/datanode1/postgresql.conf
+sed -i "s/^#log_line_prefix.*/log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d '                   # special values:/" $dir/datanode1/postgresql.conf
+sed -i 's/^#logging_collector.*/logging_collector = on		# Enable capturing of stderr and csvlog/' $dir/datanode1/postgresql.conf
 echo " ==> Done"
 echo "Launching Datanode1..."
 $bin/pg_ctl -U postgres -D $dir/datanode1 -Z datanode -l $dir/datanode1/logfile.txt start
@@ -76,8 +76,8 @@ echo ""
 echo " ==> Generating Datanode2..."
 $bin/initdb -U postgres -D $dir/datanode2 --nodename datanode2
 sed -i 's/^#port.*/port = 15533				# (change requires restart)/' $dir/datanode2/postgresql.conf
-sed -i 's/#log_line_prefix.*/log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d '                   # special values:/' $dir/datanode2/postgresql.conf
-sed -i 's/#logging_collector.*/logging_collector = on		# Enable capturing of stderr and csvlog/' $dir/datanode2/postgresql.conf
+sed -i "s/^#log_line_prefix.*/log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d '                   # special values:/" $dir/datanode2/postgresql.conf
+sed -i 's/^#logging_collector.*/logging_collector = on		# Enable capturing of stderr and csvlog/' $dir/datanode2/postgresql.conf
 echo " ==> Done"
 echo " ==> Launching Datanode2..."
 $bin/pg_ctl -U postgres -D $dir/datanode2 -Z datanode -l $dir/datanode2/logfile.txt start
@@ -89,7 +89,7 @@ echo " ==> Generating Coordinator1..."
 $bin/initdb -U postgres -D $dir/coord1 --nodename coord1
 sed -i 's/^#port.*/port = 5532				# (change requires restart)/' $dir/coord1/postgresql.conf
 sed -i 's/#pooler_port.*/pooler_port = 6660                     # Pool Manager TCP portf/' $dir/coord1/postgresql.conf
-sed -i 's/#log_line_prefix.*/log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d '                   # special values:/' $dir/coord1/postgresql.conf
+sed -i "s/#log_line_prefix.*/log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d '                   # special values:/" $dir/coord1/postgresql.conf
 sed -i 's/#logging_collector.*/logging_collector = on		# Enable capturing of stderr and csvlog/' $dir/coord1/postgresql.conf
 echo " ==> Done"
 echo " ==> Launching Coordinator1..."
@@ -101,7 +101,7 @@ echo " ==> Generating Coordinator2..."
 $bin/initdb -U postgres -D $dir/coord2 --nodename coord2
 sed -i 's/^#port.*/port = 5533				# (change requires restart)/' $dir/coord2/postgresql.conf
 sed -i 's/#pooler_port.*/pooler_port = 6661                     # Pool Manager TCP portf/' $dir/coord2/postgresql.conf
-sed -i 's/#log_line_prefix.*/log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d '                   # special values:/' $dir/coord2/postgresql.conf
+sed -i "s/#log_line_prefix.*/log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d '                   # special values:/" $dir/coord2/postgresql.conf
 sed -i 's/#logging_collector.*/logging_collector = on		# Enable capturing of stderr and csvlog/' $dir/coord2/postgresql.conf
 echo "Done"
 $bin/pg_ctl -U postgres -D $dir/coord2 -Z coordinator -l $dir/coord2/logfile.txt start
