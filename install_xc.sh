@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 dir=0;
 bin=0;
