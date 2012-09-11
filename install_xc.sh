@@ -47,7 +47,7 @@ sed -i "s/^nodename.*/nodename = 'GTM1'				# Specifies the node name./"		$dir/gt
 sed -i "s/^port.*/port = 6668					# Port number of this GTM./"		$dir/gtm1/gtm.conf
 echo " ==> Done."
 echo " ==> Launching GTM1..."
-$bin/gtm_ctl -Z gtm -D $dir/gtm1/ -p $bin/ -l $dir/gtm1/logfile.txt start
+$bin/gtm_ctl -Z gtm -D $dir/gtm1/ -p $bin/ -l $dir/gtm1/gtm.log start
 echo " ==> Done."
 echo " ==> Generating GTM2..."
 $bin/initgtm -Z gtm -D $dir/gtm2/
@@ -58,7 +58,7 @@ sed -i "s/^#active_host.*/active_host = 'localhost'		# Listen address of active 
 sed -i "s/^#active_port.*/active_port = 6668			# Port number of active GTM./"		$dir/gtm2/gtm.conf
 echo " ==> Done."
 echo " ==> Launching GTM2..."
-$bin/gtm_ctl -Z gtm -D $dir/gtm2/ -p $bin/ -l $dir/gtm2/logfile.txt start
+$bin/gtm_ctl -Z gtm -D $dir/gtm2/ -p $bin/ -l $dir/gtm2/gtm.log start
 echo " ==> Done."
 echo ""
 
@@ -67,7 +67,7 @@ $bin/initgtm -Z gtm_proxy -D $dir/gtm_proxy/
 sed -i "s/^nodename.*/nodename = 'GTMPROXY'			# Specifies the node name./" $dir/gtm_proxy/gtm_proxy.conf
 echo " ==> Done."
 echo " ==> Launching GTM Proxy..."
-$bin/gtm_ctl -Z gtm_proxy -D $dir/gtm_proxy/ -p $bin/ -l $dir/gtm_proxy/logfile.txt start
+$bin/gtm_ctl -Z gtm_proxy -D $dir/gtm_proxy/ -p $bin/ -l $dir/gtm_proxy/gtm_proxy.log start
 echo "$bin/gtm_ctl -Z gtm_proxy -D $dir/gtm_proxy/ -p $bin/ -l $dir/gtm_proxy/logfile.txt start"
 echo " ==> Done."
 echo ""
