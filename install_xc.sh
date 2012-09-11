@@ -41,22 +41,34 @@ echo "dir: $dir bin: $bin"
 #mkdir $dir/ datanode2
 
 #2. Setup GTM & proxy
-echo " ==> Generating GTM..."
-$bin/initgtm -Z gtm -D $dir/gtm/
-sed -i "s/^nodename.*/nodename = 'GTM1'					# Specifies the node name./" $dir/gtm/gtm.conf
-sed -i "s/^port.*/port = 6668					# Port number of this GTM./" $dir/gtm/gtm.conf
+echo " ==> Generating GTM1..."
+$bin/initgtm -Z gtm -D $dir/gtm1/
+sed -i "s/^nodename.*/nodename = 'GTM1'				# Specifies the node name./"		$dir/gtm1/gtm.conf
+sed -i "s/^port.*/port = 6668					# Port number of this GTM./"		$dir/gtm1/gtm.conf
 echo " ==> Done."
-echo " ==> Launching GTM..."
-$bin/gtm_ctl -Z gtm -D $dir/gtm/ -p $bin/ -l $dir/gtm/logfile.txt start
+echo " ==> Launching GTM1..."
+$bin/gtm_ctl -Z gtm -D $dir/gtm1/ -p $bin/ -l $dir/gtm1/logfile.txt start
+echo " ==> Done."
+echo " ==> Generating GTM2..."
+$bin/initgtm -Z gtm -D $dir/gtm2/
+sed -i "s/^nodename.*/nodename = 'GTM2'				# Specifies the node name./"		$dir/gtm2/gtm.conf
+sed -i "s/^port.*/port = 6669					# Port number of this GTM./"		$dir/gtm2/gtm.conf
+sed -i "s/^#startup.*/startup = STANDBY				# Start mode. ACT\/STANDBY./" 		$dir/gtm2/gtm.conf
+sed -i "s/^#active_host.*/active_host = 'localhost'		# Listen address of active GTM./"	$dir/gtm2/gtm.conf
+sed -i "s/^#active_port.*/active_port = 6668			# Port number of active GTM./"		$dir/gtm2/gtm.conf
+echo " ==> Done."
+echo " ==> Launching GTM2..."
+$bin/gtm_ctl -Z gtm -D $dir/gtm2/ -p $bin/ -l $dir/gtm2/logfile.txt start
 echo " ==> Done."
 echo ""
 
 echo " ==> Generating GTM Proxy..."
 $bin/initgtm -Z gtm_proxy -D $dir/gtm_proxy/
-sed -i "s/^nodename.*/nodename = 'GTMPROXY'				# Specifies the node name./" $dir/gtm_proxy/gtm_proxy.conf
+sed -i "s/^nodename.*/nodename = 'GTMPROXY'			# Specifies the node name./" $dir/gtm_proxy/gtm_proxy.conf
 echo " ==> Done."
 echo " ==> Launching GTM Proxy..."
 $bin/gtm_ctl -Z gtm_proxy -D $dir/gtm_proxy/ -p $bin/ -l $dir/gtm_proxy/logfile.txt start
+echo "$bin/gtm_ctl -Z gtm_proxy -D $dir/gtm_proxy/ -p $bin/ -l $dir/gtm_proxy/logfile.txt start"
 echo " ==> Done."
 echo ""
 
@@ -104,8 +116,17 @@ sed -i 's/#pooler_port.*/pooler_port = 6661                     # Pool Manager T
 sed -i "s/#log_line_prefix.*/log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d '                   # special values:/" $dir/coord2/postgresql.conf
 sed -i 's/#logging_collector.*/logging_collector = on		# Enable capturing of stderr and csvlog/' $dir/coord2/postgresql.conf
 echo "Done"
-$bin/pg_ctl -U postgres -D $dir/coord2 -Z coordinator -l $dir/coord2/logfile.txt start
 echo " ==> Launching Coordinator2..."
+$bin/pg_ctl -U postgres -D $dir/coord2 -Z coordinator -l $dir/coord2/logfile.txt start
 echo " ==> Done"
 echo ""
+sleep 2
+
+#5. Declare nodes in cluster
+echo " ==> Declaring 2 nodes in Coordinator1..."
+$bin/psql -p 5532 -h localhost -c "CREATE NODE dn1 WITH (TYPE='datanode', PORT=15532);CREATE NODE dn2 WITH (TYPE='datanode', PORT=15533);CREATE NODE coord2 WITH (TYPE='coordinator', PORT=5533);select pgxc_pool_reload();"
+echo " ==>Done."
+echo " ==> Declaring 2 nodes in Coordinator2..."
+$bin/psql -p 5533 -h localhost -c "CREATE NODE dn1 WITH (TYPE='datanode', PORT=15532);CREATE NODE dn2 WITH (TYPE='datanode', PORT=15533);CREATE NODE coord1 WITH (TYPE='coordinator', PORT=5532);select pgxc_pool_reload();"
+echo " ==>Done."
 
