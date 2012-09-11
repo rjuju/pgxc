@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 echo "Shutting down datanode1..."
 ~/travail/pgxc1.0.1/bin/pg_ctl -D ~/travail/pgxctest/datanode1 -m immediate stop
 echo "Shutting down datanode2..."
