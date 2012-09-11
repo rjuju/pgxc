@@ -1,0 +1,9 @@
+http://postgres-xc.sourceforge.net/docs/1_0/app-gtm-ctl.html
+
+http://postgres-xc.sourceforge.net/docs/1_0/admin.html
+
+http://postgresxc.wikia.com/wiki/GTM_Standby_Configuration
+
+http://michael.otacoo.com/postgresql-2/start-a-postgres-xc-cluster-in-more-or-less-10-commands/
+
+
